@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>EdgePosture - Web Security & CDN Consulting</title>
+<meta name="description" content="Expert Cloudflare consulting, web security posture analysis, and CDN optimization."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#080a0f;--bg2:#0d1017;--bg3:#141720;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--text:#e4e6f0;--text2:#8186a0;--text3:#484d63;--accent:#4f7bff;--accent2:#7c9fff;--teal:#2dd4bf;--orange:#f6821f}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:16px;line-height:1.65;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(79,123,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(79,123,255,0.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;gap:2rem;padding:0 3rem;height:64px;background:rgba(8,10,15,0.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo{width:34px;height:34px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:12px;font-weight:700;color:#fff}
+.nav-name{font-size:16px;font-weight:600;color:var(--text)}
+.nav-links{display:flex;gap:0.25rem;margin-left:auto}
+.nav-link{color:var(--text2);text-decoration:none;font-size:14px;padding:7px 13px;border-radius:7px;transition:color 0.15s,background 0.15s}
+.nav-link:hover{color:var(--text);background:rgba(255,255,255,0.05)}
+.nav-cta{background:var(--accent);color:#fff;text-decoration:none;padding:8px 18px;border-radius:8px;font-size:14px;font-weight:500;transition:opacity 0.15s}
+.nav-cta:hover{opacity:0.85}
+.hero{position:relative;z-index:1;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:8rem 2rem 6rem}
+.hero-inner{max-width:800px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(79,123,255,0.1);border:1px solid rgba(79,123,255,0.25);color:var(--accent2);font-size:12px;font-family:'Space Mono',monospace;padding:5px 12px;border-radius:20px;margin-bottom:2rem;text-transform:uppercase;letter-spacing:0.06em}
+.hero-badge-dot{width:6px;height:6px;background:var(--teal);border-radius:50%;animation:blink 2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.hero-title{font-family:'Space Mono',monospace;font-size:clamp(2.5rem,7vw,4.5rem);font-weight:700;line-height:1.1;letter-spacing:-2px;margin-bottom:1.5rem}
+.hero-title em{font-style:normal;color:var(--accent2)}
+.hero-title .line2{display:block;color:var(--text2)}
+.hero-sub{font-size:clamp(1rem,2.5vw,1.2rem);color:var(--text2);max-width:560px;margin:0 auto 2.5rem;font-weight:300;line-height:1.7}
+.hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;text-decoration:none;padding:14px 28px;border-radius:10px;font-size:15px;font-weight:600;transition:opacity 0.15s,transform 0.15s}
+.btn-primary:hover{opacity:0.9;transform:translateY(-1px)}
+.btn-secondary{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--text);text-decoration:none;padding:14px 28px;border-radius:10px;font-size:15px;font-weight:500;border:1px solid var(--border2);transition:border-color 0.15s,transform 0.15s}
+.btn-secondary:hover{border-color:rgba(255,255,255,0.25);transform:translateY(-1px)}
+.stats-bar{position:relative;z-index:1;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg2);display:grid;grid-template-columns:repeat(4,1fr)}
+.stat-item{padding:2rem;text-align:center;border-right:1px solid var(--border)}
+.stat-item:last-child{border-right:none}
+.stat-num{font-family:'Space Mono',monospace;font-size:2rem;font-weight:700;color:var(--accent2);display:block;margin-bottom:4px}
+.stat-label{font-size:13px;color:var(--text2)}
+section{position:relative;z-index:1}
+.section-inner{max-width:1100px;margin:0 auto;padding:6rem 2rem}
+.section-label{font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent2);font-family:'Space Mono',monospace;margin-bottom:1rem;display:block}
+.section-title{font-family:'Space Mono',monospace;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;letter-spacing:-1px;margin-bottom:1.25rem;line-height:1.15}
+.section-sub{color:var(--text2);font-size:17px;max-width:520px;line-height:1.7;margin-bottom:3rem}
+.product-split{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.product-mock{background:var(--bg3);border:1px solid var(--border2);border-radius:16px;padding:1.5rem}
+.mock-bar{display:flex;align-items:center;gap:6px;margin-bottom:1rem}
+.mock-dot{width:10px;height:10px;border-radius:50%}
+.mock-dot-r{background:#ff5f57}.mock-dot-y{background:#febc2e}.mock-dot-g{background:#28c840}
+.mock-url-bar{flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:5px;padding:5px 10px;font-family:'Space Mono',monospace;font-size:11px;color:var(--text3)}
+.mock-score-row{display:flex;gap:8px;margin-bottom:10px}
+.mock-score{flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 8px;text-align:center}
+.mock-score-num{font-family:'Space Mono',monospace;font-size:22px;font-weight:700;display:block;margin-bottom:2px}
+.mock-score-num.g{color:#22c55e}.mock-score-num.w{color:#f59e0b}.mock-score-num.p{color:#ef4444}
+.mock-score-lbl{font-size:10px;color:var(--text3)}
+.mock-finding{background:var(--bg2);border:1px solid var(--border);border-left:3px solid #f59e0b;border-radius:6px;padding:8px 10px;margin-bottom:6px}
+.mock-finding-title{font-size:11px;font-weight:500;margin-bottom:2px}
+.mock-finding-sub{font-size:10px;color:var(--text3)}
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.service-card{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:1.75rem;transition:border-color 0.2s,transform 0.2s}
+.service-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.service-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:1rem;background:rgba(79,123,255,0.1)}
+.service-title{font-size:16px;font-weight:600;margin-bottom:8px}
+.service-desc{font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:1rem}
+.service-price{font-family:'Space Mono',monospace;font-size:13px;color:var(--accent2);display:block}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);position:relative}
+.step{padding:2rem 1.5rem;position:relative}
+.step-num{font-family:'Space Mono',monospace;font-size:11px;color:var(--text3);letter-spacing:0.08em;margin-bottom:0.75rem;display:block}
+.step-title{font-size:15px;font-weight:600;margin-bottom:6px}
+.step-desc{font-size:13px;color:var(--text2);line-height:1.55}
+.step::after{content:'→';position:absolute;right:-8px;top:2rem;color:var(--text3);font-size:16px}
+.step:last-child::after{display:none}
+.cta-section{background:linear-gradient(135deg,rgba(79,123,255,0.08),rgba(45,212,191,0.05));border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.cta-inner{max-width:700px;margin:0 auto;padding:6rem 2rem;text-align:center}
+.cta-title{font-family:'Space Mono',monospace;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;letter-spacing:-1px;margin-bottom:1rem}
+.cta-sub{color:var(--text2);font-size:17px;margin-bottom:2.5rem}
+.cta-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:2.5rem 3rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.footer-brand{display:flex;align-items:center;gap:8px}
+.footer-logo{width:28px;height:28px;background:var(--accent);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:#fff}
+.footer-links{display:flex;gap:1.5rem}
+.footer-link{color:var(--text2);text-decoration:none;font-size:13px;transition:color 0.15s}
+.footer-link:hover{color:var(--text)}
+.footer-copy{font-size:12px;color:var(--text3)}
+.cf-badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--orange);background:rgba(246,130,31,0.08);border:1px solid rgba(246,130,31,0.2);padding:3px 10px;border-radius:5px}
+@media(max-width:768px){.product-split,.services-grid,.steps{grid-template-columns:1fr}.stats-bar{grid-template-columns:repeat(2,1fr)}}
+</style>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+</head>
+<body>
+<nav>
+<a class="nav-brand" href="/"><svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" rx="4" fill="#080a0f"/><polygon points="16,3 27,9 27,23 16,29 5,23 5,9" fill="#0c1420" stroke="#1a3a5c" stroke-width="1"/><rect x="8" y="9" width="7" height="2" rx="0.5" fill="#4f7bff"/><rect x="8" y="13" width="5" height="2" rx="0.5" fill="#4f7bff"/><rect x="8" y="17" width="7" height="2" rx="0.5" fill="#4f7bff"/><rect x="8" y="9" width="2" height="12" rx="0.5" fill="#4f7bff"/><rect x="17" y="9" width="2" height="12" rx="0.5" fill="#7c9fff"/><rect x="17" y="9" width="7" height="2" rx="0.5" fill="#7c9fff"/><rect x="17" y="13" width="7" height="2" rx="0.5" fill="#7c9fff"/><rect x="22" y="9" width="2" height="6" rx="0.5" fill="#7c9fff"/></svg><span class="nav-name">EdgePosture</span></a>
+<div class="nav-links">
+<a class="nav-link" href="#product">Product</a>
+<a class="nav-link" href="#services">Services</a>
+<a class="nav-link" href="#how">How it works</a>
+<a class="nav-link" href="https://getedgeposture.com">Consulting</a>
+    <a class="nav-link" data-gated="https://blog.edgeposture.ai">Blog</a>
+    <a class="nav-link" data-gated="https://chat.edgeposture.ai">AI Assistant</a>
+</div>
+<div id="nav-auth-area" style="display:flex;align-items:center;gap:10px">
+    <div id="user-pill-nav" class="user-pill" style="display:none">
+      <span>&#128100;</span>
+      <span class="user-pill-name" id="nav-username"></span>
+      <button class="signout-btn" onclick="doSignOut()">&#x2715;</button>
+    </div>
+    <button id="nav-signin-btn" class="nav-cta" onclick="openModal('login')" style="display:none">Sign in</button>
+    <a id="nav-scanner-btn" class="nav-cta" data-gated="https://edgepostureapp.com">Launch scanner</a>
+  </div>
+</nav>
+<section class="hero">
+<div class="hero-inner">
+<div class="hero-badge"><span class="hero-badge-dot"></span>AI-powered &middot; Built at the edge</div>
+<h1 class="hero-title">Know your <em>web posture</em><span class="line2">before attackers do</span></h1>
+<p class="hero-sub">Instant AI-powered analysis of any URL &mdash; security headers, performance, compliance, and CDN configuration. Expert CDN and application security consulting when you need to go deeper.</p>
+<div class="hero-actions">
+<a class="btn-primary" data-gated="https://edgepostureapp.com">Scan your site free &rarr;</a>
+<a class="btn-primary" data-gated="https://chat.edgeposture.ai" style="background:#0f6e56">AI Assistant &rarr;</a>
+<a class="btn-secondary" data-gated="https://blog.edgeposture.ai">Blog &rarr;</a>
+<a class="btn-secondary" href="https://getedgeposture.com">Hire an Edge SME</a>
+</div>
+</div>
+</section>
+<div class="stats-bar">
+<div class="stat-item"><span class="stat-num">10+</span><span class="stat-label">Security checks per scan</span></div>
+<div class="stat-item"><span class="stat-num">&lt;3s</span><span class="stat-label">Average scan time</span></div>
+<div class="stat-item"><span class="stat-num">4</span><span class="stat-label">Analysis categories</span></div>
+<div class="stat-item"><span class="stat-num">100%</span><span class="stat-label">100% edge-native stack</span></div>
+</div>
+<section id="product"><div class="section-inner"><div class="product-split">
+<div>
+<span class="section-label">The scanner</span>
+<h2 class="section-title">Security posture in seconds</h2>
+<p class="section-sub">Paste any URL. EdgePosture fetches the page at the edge, extracts security headers, performance signals, compliance indicators, and CDN configuration &mdash; then runs it through AI to generate prioritized recommendations.</p>
+<a class="btn-primary" href="https://edgepostureapp.com">Try it free &rarr;</a>
+</div>
+<div class="product-mock">
+<div class="mock-bar"><div class="mock-dot mock-dot-r"></div><div class="mock-dot mock-dot-y"></div><div class="mock-dot mock-dot-g"></div><div class="mock-url-bar">edgepostureapp.com &middot; scanning example.com&hellip;</div></div>
+<div class="mock-score-row">
+<div class="mock-score"><span class="mock-score-num g">84</span><span class="mock-score-lbl">Security</span></div>
+<div class="mock-score"><span class="mock-score-num w">61</span><span class="mock-score-lbl">Performance</span></div>
+<div class="mock-score"><span class="mock-score-num g">90</span><span class="mock-score-lbl">Compliance</span></div>
+<div class="mock-score"><span class="mock-score-num p">42</span><span class="mock-score-lbl">CDN</span></div>
+</div>
+<div class="mock-finding"><div class="mock-finding-title">Missing Content-Security-Policy header</div><div class="mock-finding-sub">HIGH &middot; Security &middot; Add via edge Transform Rules</div></div>
+<div class="mock-finding" style="border-left-color:#ef4444"><div class="mock-finding-title">No CDN detected &mdash; serving from origin</div><div class="mock-finding-sub">CRITICAL &middot; CDN &middot; Enable Cloudflare proxying</div></div>
+<div class="mock-finding" style="border-left-color:#4f7bff"><div class="mock-finding-title">TTFB 487ms &mdash; above 200ms threshold</div><div class="mock-finding-sub">MEDIUM &middot; Performance &middot; Enable Tiered Cache</div></div>
+</div>
+</div></div></section>
+<section id="services" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+<div class="section-inner">
+<span class="section-label">Consulting</span>
+<h2 class="section-title">Expert edge &amp; security help</h2>
+<p class="section-sub">Built by a Cloudflare Solutions Engineer. Get hands-on help configuring WAF rules, optimizing cache, hardening headers, and architecting edge-native applications.</p>
+<div class="services-grid">
+<div class="service-card"><div class="service-icon">&#128274;</div><div class="service-title">Security audit</div><div class="service-desc">Full WAF review, security headers assessment, DDoS posture, bot management configuration, and a written remediation plan.</div><span class="service-price">Starting at $2,500 &rarr;</span></div>
+<div class="service-card"><div class="service-icon">&#9889;</div><div class="service-title">Performance optimization</div><div class="service-desc">Cache rule tuning, Tiered Cache configuration, image optimization setup, Workers performance review, and Core Web Vitals improvement.</div><span class="service-price">Starting at $2,000 &rarr;</span></div>
+<div class="service-card"><div class="service-icon">&#127959;</div><div class="service-title">Architecture review</div><div class="service-desc">Workers + Pages architecture, D1/KV data modeling, Zero Trust implementation, multi-zone strategy, and developer platform best practices.</div><span class="service-price">Starting at $3,750 &rarr;</span></div>
+</div>
+<div style="margin-top:2rem"><a class="btn-primary" href="https://getedgeposture.com">Book a consultation &rarr;</a></div>
+</div></section>
+<section id="how"><div class="section-inner">
+<span class="section-label">How it works</span>
+<h2 class="section-title">From URL to action plan</h2>
+<div class="steps">
+<div class="step"><span class="step-num">01 &mdash;</span><div class="step-title">Paste your URL</div><div class="step-desc">Enter any publicly accessible URL. No signup required for your first scan.</div></div>
+<div class="step"><span class="step-num">02 &mdash;</span><div class="step-title">Edge fetch + analysis</div><div class="step-desc">A Cloudflare Worker fetches the page, extracting headers, response times, and CDN indicators.</div></div>
+<div class="step"><span class="step-num">03 &mdash;</span><div class="step-title">AI generates findings</div><div class="step-desc">Workers AI processes the data and produces category scores and prioritized recommendations.</div></div>
+<div class="step"><span class="step-num">04 &mdash;</span><div class="step-title">Take action</div><div class="step-desc">Fix issues yourself with our guidance, or book a consultation for hands-on expert help.</div></div>
+</div>
+</div></section>
+<section class="cta-section"><div class="cta-inner">
+<h2 class="cta-title">Ready to check your posture?</h2>
+<p class="cta-sub">Free to scan. No credit card. Results in under 3 seconds.</p>
+<div class="cta-actions">
+<a class="btn-primary" href="https://edgepostureapp.com">Scan your site free &rarr;</a>
+<a class="btn-secondary" href="https://getedgeposture.com">Talk to an expert</a>
+</div>
+</div></section>
+<footer>
+<div class="footer-brand"><svg width="28" height="28" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" rx="4" fill="#080a0f"/><polygon points="16,3 27,9 27,23 16,29 5,23 5,9" fill="#0c1420" stroke="#1a3a5c" stroke-width="1"/><rect x="8" y="9" width="7" height="2" rx="0.5" fill="#4f7bff"/><rect x="8" y="13" width="5" height="2" rx="0.5" fill="#4f7bff"/><rect x="8" y="17" width="7" height="2" rx="0.5" fill="#4f7bff"/><rect x="8" y="9" width="2" height="12" rx="0.5" fill="#4f7bff"/><rect x="17" y="9" width="2" height="12" rx="0.5" fill="#7c9fff"/><rect x="17" y="9" width="7" height="2" rx="0.5" fill="#7c9fff"/><rect x="17" y="13" width="7" height="2" rx="0.5" fill="#7c9fff"/><rect x="22" y="9" width="2" height="6" rx="0.5" fill="#7c9fff"/></svg><span style="font-size:14px;font-weight:600;margin-left:8px">EdgePosture</span></div>
+<div class="footer-links">
+<a class="footer-link" href="https://edgepostureapp.com">Scanner</a>
+<a class="footer-link" href="https://getedgeposture.com">Consulting</a>
+<a class="footer-link" href="mailto:mike.2.dockins@gmail.com">Contact</a>
+</div>
+<div class="cf-badge">&#9889; Built 100% on edge infrastructure</div>
+<span class="footer-copy">&copy; 2025 EdgePosture</span>
+</footer>
+
+<!-- Auth Modal -->
+<div id="auth-modal" style="display:none;position:fixed;inset:0;top:0;left:0;right:0;bottom:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:99999;align-items:center;justify-content:center;padding:1rem;">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+
+    <!-- Login form -->
+    <div id="login-form">
+      <svg class="modal-logo" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" rx="4" fill="#080a0f"/><polygon points="16,3 27,9 27,23 16,29 5,23 5,9" fill="#0c1420" stroke="#1a3a5c" stroke-width="1"/><rect x="8" y="9" width="7" height="2" rx="0.5" fill="#4f7bff"/><rect x="8" y="13" width="5" height="2" rx="0.5" fill="#4f7bff"/><rect x="8" y="17" width="7" height="2" rx="0.5" fill="#4f7bff"/><rect x="8" y="9" width="2" height="12" rx="0.5" fill="#4f7bff"/><rect x="17" y="9" width="2" height="12" rx="0.5" fill="#7c9fff"/><rect x="17" y="9" width="7" height="2" rx="0.5" fill="#7c9fff"/><rect x="17" y="13" width="7" height="2" rx="0.5" fill="#7c9fff"/><rect x="22" y="9" width="2" height="6" rx="0.5" fill="#7c9fff"/></svg>
+      <h2>Welcome back</h2>
+      <p>Sign in to access the scanner, AI assistant, and blog.</p>
+      <div class="modal-field"><label>Email</label><input type="email" id="login-email" placeholder="you@example.com"/></div>
+      <div class="modal-field"><label>Password</label><input type="password" id="login-password" placeholder="Your password"/></div>
+      <div class="modal-err" id="login-err"></div>
+      <button class="modal-btn" id="login-submit-btn" onclick="doLogin()">Sign in</button>
+      <div class="modal-switch">No account? <button onclick="showRegister()">Create one free</button></div>
+    </div>
+
+    <!-- Register form -->
+    <div id="register-form" style="display:none">
+      <svg class="modal-logo" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" rx="4" fill="#080a0f"/><polygon points="16,3 27,9 27,23 16,29 5,23 5,9" fill="#0c1420" stroke="#1a3a5c" stroke-width="1"/><rect x="8" y="9" width="7" height="2" rx="0.5" fill="#4f7bff"/><rect x="8" y="13" width="5" height="2" rx="0.5" fill="#4f7bff"/><rect x="8" y="17" width="7" height="2" rx="0.5" fill="#4f7bff"/><rect x="8" y="9" width="2" height="12" rx="0.5" fill="#4f7bff"/><rect x="17" y="9" width="2" height="12" rx="0.5" fill="#7c9fff"/><rect x="17" y="9" width="7" height="2" rx="0.5" fill="#7c9fff"/><rect x="17" y="13" width="7" height="2" rx="0.5" fill="#7c9fff"/><rect x="22" y="9" width="2" height="6" rx="0.5" fill="#7c9fff"/></svg>
+      <h2>Create your account</h2>
+      <p>Free to join. Access the scanner, AI assistant, and blog.</p>
+      <div class="modal-field"><label>Name</label><input type="text" id="reg-name" placeholder="Your name"/></div>
+      <div class="modal-field"><label>Email</label><input type="email" id="reg-email" placeholder="you@example.com"/></div>
+      <div class="modal-field"><label>Password</label><input type="password" id="reg-password" placeholder="Min 8 characters"/></div>
+      <div class="modal-err" id="reg-err"></div>
+      <button class="modal-btn" id="reg-submit-btn" onclick="doRegister()">Create account</button>
+      <div class="modal-switch">Already have an account? <button onclick="showLogin()">Sign in</button></div>
+    </div>
+  </div>
+</div>
+
+<script>
+var API = 'https://api.edgepostureapp.com';
+var tok = localStorage.getItem('ep_token') || null;
+var user = null;
+var pendingUrl = null;
+
+try { user = JSON.parse(localStorage.getItem('ep_user') || 'null'); } catch(e) {}
+
+function initAuth() {
+  if (tok && user) {
+    showUserPill(user.name);
+  } else {
+    document.getElementById('nav-signin-btn').style.display = 'block';
+  }
+}
+
+function showUserPill(name) {
+  document.getElementById('nav-username').textContent = name;
+  document.getElementById('user-pill-nav').style.display = 'flex';
+  document.getElementById('nav-signin-btn').style.display = 'none';
+}
+
+function gatedNav(e, url) {
+  if (tok && user) return true;
+  e.preventDefault();
+  pendingUrl = url;
+  openModal('login');
+  return false;
+}
+
+function openModal(mode) {
+  var m = document.getElementById('auth-modal');
+  m.style.display = 'flex';
+  m.style.position = 'fixed';
+  m.style.top = '0';
+  m.style.left = '0';
+  m.style.width = '100%';
+  m.style.height = '100%';
+  m.style.zIndex = '99999';
+  m.style.background = 'rgba(0,0,0,0.75)';
+  m.style.alignItems = 'center';
+  m.style.justifyContent = 'center';
+  if (mode === 'register') showRegister();
+  else showLogin();
+}
+
+function closeModal() {
+  document.getElementById('auth-modal').style.display = 'none';
+  pendingUrl = null;
+  clearErrors();
+}
+
+function showLogin() {
+  document.getElementById('login-form').style.display = 'block';
+  document.getElementById('register-form').style.display = 'none';
+  clearErrors();
+}
+
+function showRegister() {
+  document.getElementById('login-form').style.display = 'none';
+  document.getElementById('register-form').style.display = 'block';
+  clearErrors();
+}
+
+function clearErrors() {
+  var els = document.querySelectorAll('.modal-err');
+  els.forEach(function(el) { el.style.display = 'none'; el.textContent = ''; });
+}
+
+function showErr(id, msg) {
+  var el = document.getElementById(id);
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+async function doLogin() {
+  var email = document.getElementById('login-email').value.trim();
+  var password = document.getElementById('login-password').value;
+  var btn = document.getElementById('login-submit-btn');
+  if (!email || !password) { showErr('login-err', 'Email and password required'); return; }
+  btn.textContent = 'Signing in...'; btn.disabled = true;
+  try {
+    var r = await fetch(API + '/auth/login', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({email, password}) });
+    var d = await r.json();
+    if (!r.ok) { showErr('login-err', d.error || 'Invalid credentials'); return; }
+    onAuthed(d.token, d.user);
+  } catch(e) { showErr('login-err', 'Connection error. Please try again.'); }
+  finally { btn.textContent = 'Sign in'; btn.disabled = false; }
+}
+
+async function doRegister() {
+  var name = document.getElementById('reg-name').value.trim();
+  var email = document.getElementById('reg-email').value.trim();
+  var password = document.getElementById('reg-password').value;
+  var btn = document.getElementById('reg-submit-btn');
+  if (!name || !email || !password) { showErr('reg-err', 'All fields required'); return; }
+  if (password.length < 8) { showErr('reg-err', 'Password must be at least 8 characters'); return; }
+  btn.textContent = 'Creating account...'; btn.disabled = true;
+  try {
+    var r = await fetch(API + '/auth/register', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({name, email, password}) });
+    var d = await r.json();
+    if (!r.ok) { showErr('reg-err', d.error || 'Registration failed'); return; }
+    onAuthed(d.token, d.user);
+  } catch(e) { showErr('reg-err', 'Connection error. Please try again.'); }
+  finally { btn.textContent = 'Create account'; btn.disabled = false; }
+}
+
+function onAuthed(token, userData) {
+  tok = token;
+  user = userData;
+  localStorage.setItem('ep_token', token);
+  localStorage.setItem('ep_user', JSON.stringify(userData));
+  showUserPill(userData.name);
+  closeModal();
+  if (pendingUrl) {
+    var sep = pendingUrl.indexOf('?') >= 0 ? '&' : '?';
+    window.location.href = pendingUrl + sep + 'ep_token=' + encodeURIComponent(token) + '&ep_user=' + encodeURIComponent(JSON.stringify(userData));
+    pendingUrl = null;
+  }
+}
+
+function doSignOut() {
+  tok = null; user = null;
+  localStorage.removeItem('ep_token');
+  localStorage.removeItem('ep_user');
+  document.getElementById('user-pill-nav').style.display = 'none';
+  document.getElementById('nav-signin-btn').style.display = 'block';
+}
+
+document.getElementById('auth-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeModal();
+});
+
+initAuth();
+
+document.addEventListener('click', function(e) {
+  var el = e.target.closest('[data-gated]');
+  if (!el) return;
+  var url = el.getAttribute('data-gated');
+  if (!url) return;
+  if (tok && user) {
+    var sep = url.indexOf('?') >= 0 ? '&' : '?';
+    window.location.href = url + sep + 'ep_token=' + encodeURIComponent(tok) + '&ep_user=' + encodeURIComponent(JSON.stringify(user));
+  } else {
+    e.preventDefault();
+    pendingUrl = url;
+    openModal('login');
+  }
+});
+</script>
+
+</body>
+</html>

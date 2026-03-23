@@ -1,0 +1,12 @@
+name = "edgeposture-blog-api"
+main = "src/index.js"
+compatibility_date = "2024-11-01"
+account_id = "7a6e19dfbfa3334906ed8dcd3fe4027e"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "edgeposture-blog"
+database_id = "e22da152-9a07-4e3b-9a28-52faf7182dc6"
+
+[vars]
+ENVIRONMENT = "production"

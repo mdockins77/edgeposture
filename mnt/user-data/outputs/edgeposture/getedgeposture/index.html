@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Get EdgePosture — Book a Cloudflare Consulting Engagement</title>
+  <meta name="description" content="Book a Cloudflare consulting engagement with a certified Solutions Engineer. Security audits, performance tuning, architecture reviews, and more." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #fafaf8;
+      --bg2: #f3f2ef;
+      --bg3: #eceae5;
+      --text: #1a1917;
+      --text2: #6b6860;
+      --text3: #a09e99;
+      --accent: #1a1917;
+      --orange: #e85d20;
+      --orange2: #f07340;
+      --border: rgba(0,0,0,0.08);
+      --border2: rgba(0,0,0,0.14);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 16px; line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; gap: 2rem;
+      padding: 0 3rem; height: 64px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-logo {
+      width: 34px; height: 34px; background: var(--orange);
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 800; color: #fff;
+    }
+    .nav-name { font-size: 16px; font-weight: 600; color: var(--text); }
+    .nav-links { margin-left: auto; display: flex; gap: 0.25rem; }
+    .nav-link {
+      color: var(--text2); text-decoration: none; font-size: 14px;
+      padding: 7px 13px; border-radius: 7px; transition: color 0.15s, background 0.15s;
+    }
+    .nav-link:hover { color: var(--text); background: var(--bg2); }
+    .nav-cta {
+      background: var(--orange); color: #fff; text-decoration: none;
+      padding: 8px 18px; border-radius: 8px; font-size: 14px; font-weight: 500;
+      transition: background 0.15s;
+    }
+    .nav-cta:hover { background: var(--orange2); }
+
+    /* HERO */
+    .hero {
+      padding: 7rem 3rem 5rem;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 4rem; align-items: center;
+      max-width: 1200px; margin: 0 auto;
+    }
+    @media (max-width: 800px) { .hero { grid-template-columns: 1fr; padding: 4rem 1.5rem; } }
+    .hero-eyebrow {
+      display: inline-block; font-size: 11px; text-transform: uppercase;
+      letter-spacing: 0.12em; color: var(--orange); font-weight: 600;
+      margin-bottom: 1.25rem; font-family: 'Syne', sans-serif;
+    }
+    .hero-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 800; line-height: 1.05;
+      letter-spacing: -1.5px; margin-bottom: 1.5rem;
+    }
+    .hero-title span { color: var(--orange); }
+    .hero-sub { color: var(--text2); font-size: 17px; line-height: 1.7; margin-bottom: 2rem; }
+    .hero-trust { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .trust-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--bg2); border: 1px solid var(--border2);
+      padding: 5px 12px; border-radius: 20px;
+      font-size: 12px; color: var(--text2);
+    }
+    .hero-card {
+      background: var(--text); border-radius: 20px; padding: 2rem;
+      color: #e8e6e0;
+    }
+    .hero-card-tag {
+      font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--orange2); font-family: 'Syne', sans-serif; margin-bottom: 1rem;
+    }
+    .hero-card h3 { font-size: 18px; font-weight: 700; font-family: 'Syne', sans-serif; margin-bottom: 1rem; color: #fff; }
+    .hero-card-items { display: flex; flex-direction: column; gap: 8px; }
+    .hero-card-item {
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(255,255,255,0.06); border-radius: 8px; padding: 10px 12px;
+      font-size: 13px;
+    }
+    .hero-card-item-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--orange2); flex-shrink: 0; }
+    .hero-card-price {
+      margin-top: 1.25rem; padding-top: 1.25rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      font-size: 12px; color: rgba(255,255,255,0.4);
+    }
+
+    /* PACKAGES */
+    .packages-section { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .section-inner { max-width: 1200px; margin: 0 auto; padding: 6rem 2rem; }
+    .section-eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--orange); font-family: 'Syne', sans-serif; font-weight: 600; display: block; margin-bottom: 0.75rem; }
+    .section-title { font-family: 'Syne', sans-serif; font-size: clamp(2rem,4vw,3rem); font-weight: 800; letter-spacing: -1px; margin-bottom: 1rem; line-height: 1.1; }
+    .section-sub { color: var(--text2); font-size: 17px; max-width: 520px; margin-bottom: 3rem; }
+
+    .packages-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    @media (max-width: 900px) { .packages-grid { grid-template-columns: 1fr; } }
+
+    .pkg-card {
+      background: var(--bg); border: 1px solid var(--border2);
+      border-radius: 16px; padding: 2rem; display: flex; flex-direction: column;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .pkg-card:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.08); }
+    .pkg-card.featured {
+      background: var(--text); color: #e8e6e0;
+      border-color: var(--text);
+    }
+    .pkg-badge {
+      font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em;
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      padding: 3px 8px; border-radius: 4px; display: inline-block;
+      margin-bottom: 1rem; align-self: flex-start;
+      background: var(--bg2); color: var(--text2);
+    }
+    .pkg-card.featured .pkg-badge { background: var(--orange); color: #fff; }
+    .pkg-name { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+    .pkg-card.featured .pkg-name { color: #fff; }
+    .pkg-desc { font-size: 14px; color: var(--text2); margin-bottom: 1.5rem; line-height: 1.6; }
+    .pkg-card.featured .pkg-desc { color: rgba(255,255,255,0.55); }
+    .pkg-price { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; margin-bottom: 1.5rem; }
+    .pkg-price span { font-size: 14px; font-weight: 400; color: var(--text2); }
+    .pkg-card.featured .pkg-price { color: #fff; }
+    .pkg-card.featured .pkg-price span { color: rgba(255,255,255,0.4); }
+    .pkg-features { list-style: none; flex: 1; margin-bottom: 1.75rem; display: flex; flex-direction: column; gap: 8px; }
+    .pkg-features li { display: flex; align-items: flex-start; gap: 8px; font-size: 14px; color: var(--text2); }
+    .pkg-card.featured .pkg-features li { color: rgba(255,255,255,0.65); }
+    .pkg-features li::before { content: '✓'; color: var(--orange); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+    .pkg-card.featured .pkg-features li::before { color: var(--orange2); }
+    .pkg-btn {
+      display: block; text-align: center; text-decoration: none;
+      padding: 12px; border-radius: 10px; font-size: 15px; font-weight: 600;
+      font-family: 'DM Sans', sans-serif; transition: background 0.15s, opacity 0.15s;
+      background: var(--bg2); color: var(--text); border: 1px solid var(--border2);
+    }
+    .pkg-btn:hover { background: var(--bg3); }
+    .pkg-card.featured .pkg-btn { background: var(--orange); color: #fff; border-color: transparent; }
+    .pkg-card.featured .pkg-btn:hover { background: var(--orange2); }
+
+    /* PROCESS */
+    .process-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 0; }
+    @media (max-width: 768px) { .process-grid { grid-template-columns: 1fr 1fr; } }
+    .process-step {
+      padding: 2rem 1.5rem; border-right: 1px solid var(--border);
+    }
+    .process-step:last-child { border-right: none; }
+    .process-num {
+      font-family: 'Syne', sans-serif; font-size: 2.5rem; font-weight: 800;
+      color: var(--bg3); line-height: 1; margin-bottom: 0.75rem; display: block;
+    }
+    .process-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; font-family: 'Syne', sans-serif; }
+    .process-desc { font-size: 13px; color: var(--text2); line-height: 1.55; }
+
+    /* BIO */
+    .bio-section { border-top: 1px solid var(--border); }
+    .bio-inner { max-width: 1200px; margin: 0 auto; padding: 6rem 2rem; display: grid; grid-template-columns: 1fr 2fr; gap: 4rem; align-items: start; }
+    @media (max-width: 768px) { .bio-inner { grid-template-columns: 1fr; } }
+    .bio-avatar {
+      width: 120px; height: 120px; background: var(--bg3);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800; color: var(--text3);
+      margin-bottom: 1rem;
+    }
+    .bio-name { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+    .bio-role { font-size: 14px; color: var(--orange); font-weight: 500; }
+    .bio-text { font-size: 16px; color: var(--text2); line-height: 1.8; margin-bottom: 1.5rem; }
+    .bio-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .bio-tag { background: var(--bg2); border: 1px solid var(--border2); padding: 5px 12px; border-radius: 20px; font-size: 12px; color: var(--text2); }
+
+    /* CTA */
+    .cta-strip { background: var(--text); padding: 5rem 2rem; text-align: center; }
+    .cta-strip h2 { font-family: 'Syne', sans-serif; font-size: clamp(2rem,4vw,3rem); font-weight: 800; color: #fff; letter-spacing: -1px; margin-bottom: 1rem; }
+    .cta-strip p { color: rgba(255,255,255,0.5); font-size: 17px; margin-bottom: 2rem; }
+    .btn-orange { display: inline-flex; align-items: center; gap: 8px; background: var(--orange); color: #fff; text-decoration: none; padding: 14px 28px; border-radius: 10px; font-size: 15px; font-weight: 600; transition: background 0.15s; }
+    .btn-orange:hover { background: var(--orange2); }
+    .btn-ghost-light { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: rgba(255,255,255,0.6); text-decoration: none; padding: 14px 28px; border-radius: 10px; font-size: 15px; font-weight: 500; border: 1px solid rgba(255,255,255,0.15); transition: border-color 0.15s; margin-left: 12px; }
+    .btn-ghost-light:hover { border-color: rgba(255,255,255,0.3); color: #fff; }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 3rem;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-link { color: var(--text2); text-decoration: none; font-size: 13px; transition: color 0.15s; }
+    .footer-link:hover { color: var(--text); }
+    .footer-copy { font-size: 12px; color: var(--text3); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="/">
+    <div class="nav-logo">EP</div>
+    <span class="nav-name">EdgePosture</span>
+  </a>
+  <div class="nav-links">
+    <a class="nav-link" href="#packages">Packages</a>
+    <a class="nav-link" href="#process">Process</a>
+    <a class="nav-link" href="#about">About</a>
+    <a class="nav-link" href="https://edgepostureapp.com">Free scanner</a>
+  </div>
+  <a class="nav-cta" href="#packages">Book now</a>
+</nav>
+
+<div class="hero">
+  <div>
+    <span class="hero-eyebrow">Cloudflare SE · Available for hire</span>
+    <h1 class="hero-title">Cloudflare expertise, <span>on demand</span></h1>
+    <p class="hero-sub">Get hands-on help from a Cloudflare Solutions Engineer. Security hardening, performance optimization, Workers architecture, WAF configuration — done right, fast.</p>
+    <div class="hero-trust">
+      <span class="trust-badge">✓ Cloudflare certified</span>
+      <span class="trust-badge">✓ 48hr turnaround</span>
+      <span class="trust-badge">✓ Fixed-price packages</span>
+    </div>
+  </div>
+  <div class="hero-card">
+    <div class="hero-card-tag">Most popular engagement</div>
+    <h3>Security + Performance Bundle</h3>
+    <div class="hero-card-items">
+      <div class="hero-card-item"><div class="hero-card-item-dot"></div>Full security header audit & fix</div>
+      <div class="hero-card-item"><div class="hero-card-item-dot"></div>WAF rules review & tightening</div>
+      <div class="hero-card-item"><div class="hero-card-item-dot"></div>Cache rule optimization</div>
+      <div class="hero-card-item"><div class="hero-card-item-dot"></div>Tiered Cache configuration</div>
+      <div class="hero-card-item"><div class="hero-card-item-dot"></div>Written findings report</div>
+    </div>
+    <div class="hero-card-price">From $799 · Delivered in 48–72 hours</div>
+  </div>
+</div>
+
+<section class="packages-section" id="packages">
+  <div class="section-inner">
+    <span class="section-eyebrow">Consulting packages</span>
+    <h2 class="section-title">Pick your engagement</h2>
+    <p class="section-sub">Fixed-price, clearly scoped. No surprise invoices. Book directly and I'll reach out within 24 hours to confirm scope.</p>
+    <div class="packages-grid">
+
+      <div class="pkg-card">
+        <span class="pkg-badge">Starter</span>
+        <div class="pkg-name">Posture Review</div>
+        <div class="pkg-desc">A deep-dive scan and written analysis of your site's security, performance, and CDN configuration with a prioritized fix list.</div>
+        <div class="pkg-price">$299 <span>one-time</span></div>
+        <ul class="pkg-features">
+          <li>Full EdgePosture scan report</li>
+          <li>Security headers assessment</li>
+          <li>Performance bottleneck analysis</li>
+          <li>CDN configuration review</li>
+          <li>Written remediation checklist</li>
+          <li>30-min debrief call</li>
+        </ul>
+        <a class="pkg-btn" href="mailto:mike.2.dockins@gmail.com?subject=Posture Review Engagement">Book this →</a>
+      </div>
+
+      <div class="pkg-card featured">
+        <span class="pkg-badge">Most popular</span>
+        <div class="pkg-name">Security + Performance</div>
+        <div class="pkg-desc">Everything in Posture Review, plus hands-on implementation of fixes directly in your Cloudflare dashboard.</div>
+        <div class="pkg-price">$799 <span>one-time</span></div>
+        <ul class="pkg-features">
+          <li>Everything in Posture Review</li>
+          <li>Security headers implementation</li>
+          <li>WAF rules review & tuning</li>
+          <li>Cache rules optimization</li>
+          <li>Tiered Cache setup</li>
+          <li>Bot management review</li>
+          <li>60-min implementation call</li>
+        </ul>
+        <a class="pkg-btn" href="mailto:mike.2.dockins@gmail.com?subject=Security + Performance Engagement">Book this →</a>
+      </div>
+
+      <div class="pkg-card">
+        <span class="pkg-badge">Enterprise</span>
+        <div class="pkg-name">Architecture Advisory</div>
+        <div class="pkg-desc">Full architecture review, Workers + Pages strategy, Zero Trust planning, and ongoing advisory support for your team.</div>
+        <div class="pkg-price">$1,500 <span>/ month</span></div>
+        <ul class="pkg-features">
+          <li>Everything in Security + Perf</li>
+          <li>Workers architecture review</li>
+          <li>D1/KV data strategy</li>
+          <li>Zero Trust roadmap</li>
+          <li>Multi-zone strategy</li>
+          <li>Developer platform best practices</li>
+          <li>4 hours advisory / month</li>
+          <li>Slack access for questions</li>
+        </ul>
+        <a class="pkg-btn" href="mailto:mike.2.dockins@gmail.com?subject=Architecture Advisory Engagement">Book this →</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="process" style="border-top: 1px solid var(--border);">
+  <div class="section-inner">
+    <span class="section-eyebrow">How it works</span>
+    <h2 class="section-title">Simple, fast, no-BS</h2>
+    <div class="process-grid">
+      <div class="process-step">
+        <span class="process-num">01</span>
+        <div class="process-title">Book & pay</div>
+        <div class="process-desc">Select a package and pay securely via Stripe. You'll get a confirmation immediately.</div>
+      </div>
+      <div class="process-step">
+        <span class="process-num">02</span>
+        <div class="process-title">Intake call</div>
+        <div class="process-desc">A short 20-min call to confirm scope, get zone access, and align on priorities.</div>
+      </div>
+      <div class="process-step">
+        <span class="process-num">03</span>
+        <div class="process-title">Work happens</div>
+        <div class="process-desc">I do the work. Hands-on in your Cloudflare dashboard, async with updates via email.</div>
+      </div>
+      <div class="process-step">
+        <span class="process-num">04</span>
+        <div class="process-title">Delivery + debrief</div>
+        <div class="process-desc">Written report of everything done, with a recorded walkthrough call and 7-day follow-up support.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bio-section" id="about">
+  <div class="bio-inner">
+    <div>
+      <div class="bio-avatar">MD</div>
+      <div class="bio-name">Mike Dockins</div>
+      <div class="bio-role">Cloudflare Solutions Engineer</div>
+    </div>
+    <div>
+      <p class="bio-text">I'm a Solutions Engineer at Cloudflare — which means I spend my days helping companies architect, secure, and optimize their presence on the Cloudflare network. EdgePosture is the tooling and consulting practice I built on the side to make that expertise accessible to teams that don't have enterprise contracts.</p>
+      <p class="bio-text">Whether you need a quick security header cleanup, a full WAF overhaul, or help building edge-native applications with Workers and Pages — I can help, and I know the platform inside out.</p>
+      <div class="bio-tags">
+        <span class="bio-tag">Cloudflare Workers</span>
+        <span class="bio-tag">WAF & DDoS</span>
+        <span class="bio-tag">CDN optimization</span>
+        <span class="bio-tag">Zero Trust</span>
+        <span class="bio-tag">Pages & D1</span>
+        <span class="bio-tag">Security headers</span>
+        <span class="bio-tag">Bot management</span>
+        <span class="bio-tag">Performance</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-strip">
+  <h2>Ready to harden your edge?</h2>
+  <p>Book a package or run a free scan to see where you stand.</p>
+  <a class="btn-orange" href="mailto:mike.2.dockins@gmail.com?subject=EdgePosture Consulting">Book a consultation →</a>
+  <a class="btn-ghost-light" href="https://edgepostureapp.com">Free scanner</a>
+</section>
+
+<footer>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <div style="width:28px;height:28px;background:#e85d20;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:11px;font-weight:800;color:#fff;">EP</div>
+    <span style="font-size:14px;font-weight:600;">EdgePosture</span>
+  </div>
+  <div class="footer-links">
+    <a class="footer-link" href="https://edgeposture.ai">About</a>
+    <a class="footer-link" href="https://edgepostureapp.com">Scanner</a>
+    <a class="footer-link" href="mailto:mike.2.dockins@gmail.com">Contact</a>
+  </div>
+  <span class="footer-copy">© 2025 EdgePosture · Mike Dockins</span>
+</footer>
+
+</body>
+</html>

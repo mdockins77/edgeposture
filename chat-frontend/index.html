@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>EdgePosture AI Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#0a0c10;--bg2:#111318;--bg3:#181b22;--border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);--text:#e8eaf0;--text2:#8b8fa8;--text3:#555870;--accent:#4f7bff;--accent2:#7c9fff;--good:#22c55e;--poor:#ef4444}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column}
+body::before{content:"";position:fixed;inset:0;background-image:linear-gradient(rgba(79,123,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(79,123,255,0.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0}
+nav{position:relative;z-index:10;display:flex;align-items:center;gap:1.5rem;padding:0 1.5rem;height:56px;background:rgba(10,12,16,0.95);border-bottom:1px solid var(--border);flex-shrink:0}
+.nav-brand{display:flex;align-items:center;gap:8px;text-decoration:none}
+.nav-logo{width:28px;height:28px;background:var(--accent);border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:"Space Mono",monospace;font-size:11px;font-weight:700;color:#fff}
+.nav-title{font-size:14px;font-weight:600;color:var(--text)}
+.nav-badge{font-size:10px;padding:2px 8px;border-radius:4px;background:rgba(79,123,255,0.12);color:var(--accent2);font-family:"Space Mono",monospace;text-transform:uppercase;letter-spacing:0.04em}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.rate-info{font-size:11px;color:var(--text3)}
+.nav-link{color:var(--text2);text-decoration:none;font-size:13px;padding:5px 10px;border-radius:6px;transition:color 0.15s,background 0.15s;background:none;border:none;cursor:pointer;font-family:"DM Sans",sans-serif}
+.nav-link:hover{color:var(--text);background:rgba(255,255,255,0.06)}
+.app-body{flex:1;display:flex;overflow:hidden;position:relative;z-index:1}
+.sidebar{width:240px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.sidebar-header{padding:12px 12px 8px;border-bottom:1px solid var(--border);flex-shrink:0}
+.new-chat-btn{width:100%;background:var(--accent);color:#fff;border:none;padding:8px 12px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:"DM Sans",sans-serif;transition:opacity 0.15s;display:flex;align-items:center;justify-content:center;gap:6px}
+.new-chat-btn:hover{opacity:0.85}
+.sidebar-label{font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text3);padding:10px 12px 4px;font-family:"Space Mono",monospace}
+.sessions-list{flex:1;overflow-y:auto;padding:4px 8px 8px}
+.sessions-list::-webkit-scrollbar{width:3px}.sessions-list::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.session-item{display:flex;align-items:center;gap:6px;padding:7px 8px;border-radius:7px;cursor:pointer;transition:background 0.12s;group:true}
+.session-item:hover{background:rgba(255,255,255,0.05)}
+.session-item.active{background:rgba(79,123,255,0.1);border:1px solid rgba(79,123,255,0.2)}
+.session-item.active .session-title{color:var(--accent2)}
+.session-title{flex:1;font-size:12px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.4}
+.session-del{background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;padding:2px 4px;border-radius:4px;opacity:0;transition:opacity 0.15s,color 0.15s;flex-shrink:0}
+.session-item:hover .session-del{opacity:1}
+.session-del:hover{color:var(--poor);opacity:1}
+.session-date{font-size:10px;color:var(--text3);white-space:nowrap}
+.sessions-empty{padding:1rem 8px;font-size:12px;color:var(--text3);text-align:center}
+.chat-main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.messages{flex:1;overflow-y:auto;padding:1.5rem;display:flex;flex-direction:column;gap:1rem}
+.messages::-webkit-scrollbar{width:4px}.messages::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.msg{display:flex;gap:10px;max-width:100%}
+.msg.user{flex-direction:row-reverse}
+.msg-avatar{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;font-family:"Space Mono",monospace}
+.msg.assistant .msg-avatar{background:var(--accent);color:#fff}
+.msg.user .msg-avatar{background:var(--bg3);color:var(--text2);border:1px solid var(--border2)}
+.msg-bubble{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:10px 14px;font-size:14px;line-height:1.65;max-width:calc(100% - 40px)}
+.msg.user .msg-bubble{background:rgba(79,123,255,0.1);border-color:rgba(79,123,255,0.2);color:var(--text)}
+.msg.assistant .msg-bubble{color:var(--text2)}
+.msg.blocked .msg-bubble{background:rgba(239,68,68,0.08);border-color:rgba(239,68,68,0.2);color:var(--poor)}
+.msg-bubble code{background:var(--bg2);border:1px solid var(--border);padding:1px 5px;border-radius:3px;font-family:"Space Mono",monospace;font-size:12px;color:var(--accent2)}
+.msg-bubble pre{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;overflow-x:auto;margin:8px 0;font-family:"Space Mono",monospace;font-size:12px;color:var(--text);line-height:1.5}
+.msg-bubble pre code{background:none;border:none;padding:0;color:var(--text)}
+.msg-bubble p{margin-bottom:6px}.msg-bubble p:last-child{margin-bottom:0}
+.msg-bubble ul,.msg-bubble ol{padding-left:1.25rem;margin-bottom:6px}
+.msg-bubble li{margin-bottom:2px}
+.msg-bubble h1,.msg-bubble h2,.msg-bubble h3{font-family:"Space Mono",monospace;color:var(--text);margin:10px 0 6px;font-size:14px}
+.msg-bubble strong{color:var(--text);font-weight:600}
+.typing{display:flex;gap:4px;align-items:center;padding:4px 0}
+.typing span{width:6px;height:6px;border-radius:50%;background:var(--text3);animation:bounce 1.2s ease-in-out infinite}
+.typing span:nth-child(2){animation-delay:0.2s}.typing span:nth-child(3){animation-delay:0.4s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+.input-area{padding:1rem 1.5rem 1.25rem;flex-shrink:0}
+.input-wrap{display:flex;gap:8px;background:var(--bg3);border:1px solid var(--border2);border-radius:12px;padding:8px;transition:border-color 0.2s}
+.input-wrap:focus-within{border-color:var(--accent)}
+.chat-input{flex:1;background:none;border:none;outline:none;color:var(--text);font-size:15px;font-family:"DM Sans",sans-serif;resize:none;max-height:120px;line-height:1.5;padding:4px 6px}
+.chat-input::placeholder{color:var(--text3)}
+.send-btn{background:var(--accent);color:#fff;border:none;width:36px;height:36px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:opacity 0.15s;flex-shrink:0;align-self:flex-end}
+.send-btn:hover:not(:disabled){opacity:0.85}
+.send-btn:disabled{opacity:0.4;cursor:not-allowed}
+.input-hint{font-size:11px;color:var(--text3);margin-top:6px;text-align:center}
+.welcome{text-align:center;padding:3rem 1rem;color:var(--text2)}
+.welcome h2{font-family:"Space Mono",monospace;font-size:18px;color:var(--text);margin-bottom:0.75rem}
+.welcome p{font-size:14px;margin-bottom:1.5rem;max-width:480px;margin-left:auto;margin-right:auto}
+.suggestions{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.suggestion{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 14px;font-size:13px;cursor:pointer;transition:border-color 0.15s,color 0.15s;color:var(--text2)}
+.suggestion:hover{border-color:var(--accent);color:var(--text)}
+.auth-wrap{flex:1;display:flex;align-items:center;justify-content:center}
+.auth-card{background:var(--bg3);border:1px solid var(--border2);border-radius:16px;padding:2.5rem;width:100%;max-width:400px;text-align:center}
+.auth-logo{width:48px;height:48px;background:var(--accent);border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:"Space Mono",monospace;font-size:16px;font-weight:700;color:#fff;margin:0 auto 1.25rem}
+.auth-card h2{font-family:"Space Mono",monospace;font-size:18px;margin-bottom:0.5rem}
+.auth-card p{color:var(--text2);font-size:14px;margin-bottom:1.5rem}
+.field{margin-bottom:1rem;text-align:left}
+.field label{display:block;font-size:12px;color:var(--text2);margin-bottom:5px}
+.field input{width:100%;background:var(--bg2);border:1px solid var(--border2);color:var(--text);padding:10px 14px;border-radius:8px;font-size:14px;font-family:"DM Sans",sans-serif;outline:none}
+.field input:focus{border-color:var(--accent)}
+.btn{background:var(--accent);color:#fff;border:none;padding:11px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:"DM Sans",sans-serif;width:100%;transition:opacity 0.15s}
+.btn:hover{opacity:0.85}
+.err{color:var(--poor);font-size:12px;margin-top:6px;padding:6px 10px;background:rgba(239,68,68,0.1);border-radius:6px}
+</style>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+</head>
+<body>
+<nav>
+  <a class="nav-brand" href="https://edgeposture.ai"><svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" rx="4" fill="#080a0f"/><polygon points="16,3 27,9 27,23 16,29 5,23 5,9" fill="#0c1420" stroke="#1a3a5c" stroke-width="1"/><rect x="8" y="9" width="7" height="2" rx="0.5" fill="#4f7bff"/><rect x="8" y="13" width="5" height="2" rx="0.5" fill="#4f7bff"/><rect x="8" y="17" width="7" height="2" rx="0.5" fill="#4f7bff"/><rect x="8" y="9" width="2" height="12" rx="0.5" fill="#4f7bff"/><rect x="17" y="9" width="2" height="12" rx="0.5" fill="#7c9fff"/><rect x="17" y="9" width="7" height="2" rx="0.5" fill="#7c9fff"/><rect x="17" y="13" width="7" height="2" rx="0.5" fill="#7c9fff"/><rect x="22" y="9" width="2" height="6" rx="0.5" fill="#7c9fff"/></svg><span class="nav-title">EdgePosture AI</span></a>
+  <span class="nav-badge">Workers AI</span>
+  <div class="nav-right">
+    <span class="rate-info" id="rate-info"></span>
+    <a class="nav-link" href="https://edgepostureapp.com">Scanner</a>
+    <a class="nav-link" href="https://edgeposture.ai">Home</a>
+    <button class="nav-link" id="btn-logout" style="display:none">Sign out</button>
+  </div>
+</nav>
+<div class="app-body" id="app-body">
+  <!-- auth gate -->
+  <div class="auth-wrap" id="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-logo">EP</div>
+      <h2>Sign in to continue</h2>
+      <p>EdgePosture AI is available to registered users.</p>
+      <div class="field"><label>Email</label><input type="email" id="auth-email" placeholder="you@example.com"/></div>
+      <div class="field"><label>Password</label><input type="password" id="auth-password" placeholder="Your password"/></div>
+      <div id="auth-err"></div>
+      <button class="btn" id="login-btn">Sign in</button>
+      <p style="margin-top:1rem;font-size:13px;color:var(--text2)">No account? <a href="https://edgepostureapp.com" style="color:var(--accent2)">Create one free</a></p>
+    </div>
+  </div>
+  <!-- main chat (hidden until authed) -->
+  <div id="chat-ui" style="display:none;flex:1;display:none;overflow:hidden;flex-direction:row">
+    <div class="sidebar">
+      <div class="sidebar-header"><button class="new-chat-btn" id="new-chat-btn">+ New chat</button></div>
+      <div class="sidebar-label">Recent chats</div>
+      <div class="sessions-list" id="sessions-list"><div class="sessions-empty">No chats yet</div></div>
+    </div>
+    <div class="chat-main">
+      <div class="messages" id="messages"></div>
+      <div class="input-area">
+        <div class="input-wrap">
+          <textarea class="chat-input" id="chat-input" placeholder="Ask anything about security, CDN, performance, or web architecture..." rows="1"></textarea>
+          <button class="send-btn" id="send-btn" disabled>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+          </button>
+        </div>
+        <div class="input-hint">Enter to send &middot; Shift+Enter for new line &middot; <span id="remaining-hint"></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+var API="https://chat-api.edgeposture.ai";
+var tok=localStorage.getItem("ep_token")||null;
+var currentSessionId=null;
+var waiting=false;
+
+function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function fmtDate(d){var now=new Date(),dt=new Date(d),diff=Math.floor((now-dt)/60000);if(diff<1)return "just now";if(diff<60)return diff+"m ago";if(diff<1440)return Math.floor(diff/60)+"h ago";return dt.toLocaleDateString();}
+
+function mdToHtml(s){
+  if(!s)return "";
+  var ls=s.split("\n"),out=[],inPre=false,buf="";
+  for(var i=0;i<ls.length;i++){
+    var l=ls[i];
+    if(l.indexOf("```")===0){if(inPre){out.push(buf+"</code></pre>");buf="";inPre=false;}else{inPre=true;buf="<pre><code>";}continue;}
+    if(inPre){buf+=esc(l)+"\n";continue;}
+    if(l.indexOf("### ")===0){out.push("<h3>"+l.slice(4)+"</h3>");continue;}
+    if(l.indexOf("## ")===0){out.push("<h2>"+l.slice(3)+"</h2>");continue;}
+    if(l.indexOf("# ")===0){out.push("<h1>"+l.slice(2)+"</h1>");continue;}
+    if(l.indexOf("- ")===0){out.push("<li>"+l.slice(2)+"</li>");continue;}
+    if(l.indexOf("> ")===0){out.push("<blockquote>"+l.slice(2)+"</blockquote>");continue;}
+    if(l===""){if(buf){out.push("<p>"+buf+"</p>");buf="";}continue;}
+    l=l.replace(/`([^`]+)`/g,"<code>$1</code>");
+    l=l.replace(/[*][*]([^*]+)[*][*]/g,"<strong>$1</strong>");
+    l=l.replace(/[*]([^*]+)[*]/g,"<em>$1</em>");
+    buf+=buf?" "+l:l;
+  }
+  if(buf)out.push("<p>"+buf+"</p>");
+  return out.join("\n");
+}
+
+function addMsg(role,content,blocked){
+  var msgs=document.getElementById("messages");
+  var div=document.createElement("div");
+  div.className="msg "+(blocked?"blocked":role);
+  var bubble=role==="user"?"<p>"+esc(content)+"</p>":mdToHtml(content);
+  div.innerHTML="<div class=\"msg-avatar\">"+(role==="user"?"ME":"EP")+"</div><div class=\"msg-bubble\">"+bubble+"</div>";
+  msgs.appendChild(div);
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
+function addTyping(){
+  var msgs=document.getElementById("messages");
+  var div=document.createElement("div");
+  div.className="msg assistant";div.id="typing-ind";
+  div.innerHTML="<div class=\"msg-avatar\">EP</div><div class=\"msg-bubble\"><div class=\"typing\"><span></span><span></span><span></span></div></div>";
+  msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;
+}
+function removeTyping(){var t=document.getElementById("typing-ind");if(t)t.remove();}
+
+function showWelcome(){
+  var s=["How do I add security headers?","What is a CDN and how does it work?","Explain TTFB and how to improve it","What is a WAF and do I need one?","How does HTTPS/TLS work?","What is zero trust architecture?","Explain edge computing","How do I improve Core Web Vitals?"];
+  var sh=s.map(function(x){return "<button class=\"suggestion\" onclick=\"sendSuggestion('"+x.replace(/'/g,"\\'")+"')\">"+x+"</button>";}).join("");
+  document.getElementById("messages").innerHTML="<div class=\"welcome\"><h2>EdgePosture AI Assistant</h2><p>Ask me anything about web security, CDN architecture, application performance, compliance, or edge computing.</p><div class=\"suggestions\">"+sh+"</div></div>";
+}
+
+function sendSuggestion(s){document.getElementById("chat-input").value=s;sendMessage();}
+
+async function loadSessions(){
+  try{
+    var r=await fetch(API+"/sessions",{headers:{Authorization:"Bearer "+tok}});
+    var d=await r.json();
+    renderSessions(d.sessions||[]);
+  }catch(e){}
+}
+
+function renderSessions(sessions){
+  var el=document.getElementById("sessions-list");
+  if(!sessions.length){el.innerHTML="<div class=\"sessions-empty\">No chats yet</div>";return;}
+  el.innerHTML=sessions.map(function(s){
+    var active=s.id===currentSessionId?"active":"";
+    return "<div class=\"session-item "+active+"\" id=\"s-"+s.id+"\" onclick=\"loadSession('"+s.id+"')\">"
+      +"<div class=\"session-title\">"+esc(s.title)+"</div>"
+      +"<button class=\"session-del\" onclick=\"event.stopPropagation();delSession('"+s.id+"')\" title=\"Delete\">&times;</button>"
+      +"</div>";
+  }).join("");
+}
+
+async function loadSession(id){
+  currentSessionId=id;
+  document.getElementById("messages").innerHTML="";
+  try{
+    var r=await fetch(API+"/sessions/"+id,{headers:{Authorization:"Bearer "+tok}});
+    var d=await r.json();
+    var msgs=d.session.messages||[];
+    msgs.forEach(function(m){addMsg(m.role,m.content,false);});
+    loadSessions();
+  }catch(e){addMsg("assistant","Failed to load session.",false);}
+}
+
+async function delSession(id){
+  if(!confirm("Delete this chat?"))return;
+  await fetch(API+"/sessions/"+id,{method:"DELETE",headers:{Authorization:"Bearer "+tok}});
+  if(currentSessionId===id){currentSessionId=null;showWelcome();}
+  loadSessions();
+}
+
+function newChat(){currentSessionId=null;showWelcome();loadSessions();}
+
+async function sendMessage(){
+  if(waiting)return;
+  var inp=document.getElementById("chat-input");
+  var msg=inp.value.trim();
+  if(!msg)return;
+  inp.value="";inp.style.height="auto";
+  document.getElementById("send-btn").disabled=true;
+  waiting=true;
+  var w=document.querySelector(".welcome");if(w)w.remove();
+  addMsg("user",msg,false);
+  addTyping();
+  try{
+    var r=await fetch(API+"/chat",{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+tok},body:JSON.stringify({message:msg,sessionId:currentSessionId})});
+    var d=await r.json();
+    removeTyping();
+    if(r.status===401){logout();return;}
+    if(r.status===429){addMsg("assistant",d.error||"Rate limit reached.",false);return;}
+    if(d.error){addMsg("assistant","Error: "+d.error,false);return;}
+    addMsg("assistant",d.reply,d.blocked||false);
+    if(d.sessionId){currentSessionId=d.sessionId;loadSessions();}
+    if(d.remaining!==undefined){document.getElementById("rate-info").textContent=d.remaining+" left this hour";document.getElementById("remaining-hint").textContent=d.remaining+" messages left this hour";}
+  }catch(e){removeTyping();addMsg("assistant","Connection error. Please try again.",false);}
+  finally{waiting=false;document.getElementById("send-btn").disabled=false;inp.focus();}
+}
+
+async function doLogin(){
+  var email=document.getElementById("auth-email").value.trim();
+  var pw=document.getElementById("auth-password").value;
+  var err=document.getElementById("auth-err");
+  if(!email||!pw){err.innerHTML="<div class=\"err\">Email and password required</div>";return;}
+  try{
+    var r=await fetch("https://api.edgepostureapp.com/auth/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:email,password:pw})});
+    var d=await r.json();
+    if(!r.ok){err.innerHTML="<div class=\"err\">"+(d.error||"Invalid credentials")+"</div>";return;}
+    tok=d.token;localStorage.setItem("ep_token",tok);
+    showChat();
+  }catch(e){err.innerHTML="<div class=\"err\">Connection error</div>";}
+}
+
+function logout(){
+  tok=null;localStorage.removeItem("ep_token");
+  document.getElementById("btn-logout").style.display="none";
+  document.getElementById("chat-ui").style.display="none";
+  document.getElementById("auth-wrap").style.display="flex";
+}
+
+function showChat(){
+  document.getElementById("auth-wrap").style.display="none";
+  var ui=document.getElementById("chat-ui");
+  ui.style.display="flex";ui.style.flex="1";ui.style.flexDirection="row";
+  document.getElementById("btn-logout").style.display="block";
+  loadSessions();
+  showWelcome();
+}
+
+var inp=document.getElementById("chat-input");
+inp.addEventListener("input",function(){this.style.height="auto";this.style.height=Math.min(this.scrollHeight,120)+"px";document.getElementById("send-btn").disabled=!this.value.trim()||waiting;});
+inp.addEventListener("keydown",function(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendMessage();}});
+document.getElementById("send-btn").onclick=sendMessage;
+document.getElementById("btn-logout").onclick=logout;
+document.getElementById("new-chat-btn").onclick=newChat;
+document.getElementById("login-btn").onclick=doLogin;
+document.getElementById("auth-email").onkeydown=function(e){if(e.key==="Enter")document.getElementById("auth-password").focus();};
+document.getElementById("auth-password").onkeydown=function(e){if(e.key==="Enter")doLogin();};
+if(tok){showChat();}
+</script>
+</body>
+</html>

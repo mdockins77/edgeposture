@@ -1,0 +1,20 @@
+name = "edgeposture-chat-api"
+main = "src/index.js"
+compatibility_date = "2024-11-01"
+account_id = "7a6e19dfbfa3334906ed8dcd3fe4027e"
+
+[ai]
+binding = "AI"
+
+[[kv_namespaces]]
+binding = "CHAT_KV"
+id = "1bd8581fe96c413bbbc96a5ecc3e2796"
+
+[vars]
+ENVIRONMENT = "production"
+RATE_LIMIT_MAX = "20"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "edgeposture-prod"
+database_id = "a1f71d48-e9a6-4196-911f-54cd43bb904d"

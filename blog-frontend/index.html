@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>EdgePosture Blog</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#0a0c10;--bg2:#111318;--bg3:#181b22;--border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);--text:#e8eaf0;--text2:#8b8fa8;--text3:#555870;--accent:#4f7bff;--accent2:#7c9fff;--good:#22c55e;--poor:#ef4444}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:16px;line-height:1.65}
+body::before{content:"";position:fixed;inset:0;background-image:linear-gradient(rgba(79,123,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(79,123,255,0.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0}
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:2rem;padding:0 2rem;height:60px;background:rgba(10,12,16,0.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo{width:32px;height:32px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:"Space Mono",monospace;font-size:12px;font-weight:700;color:#fff}
+.nav-name{font-weight:600;font-size:15px;color:var(--text)}
+.nav-links{display:flex;gap:0.25rem;margin-left:auto}
+.nav-link{background:none;border:none;color:var(--text2);font-size:14px;padding:6px 12px;border-radius:6px;cursor:pointer;text-decoration:none;font-family:"DM Sans",sans-serif;transition:color 0.15s,background 0.15s}
+.nav-link:hover,.nav-link.active{color:var(--text);background:rgba(255,255,255,0.06)}
+.nav-btn{background:var(--accent);color:#fff;border:none;padding:7px 16px;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer;font-family:"DM Sans",sans-serif;transition:opacity 0.15s}
+.nav-btn:hover{opacity:0.85}
+main{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:4rem 2rem 6rem}
+.page-header{margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--border)}
+.page-eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent2);font-family:"Space Mono",monospace;display:block;margin-bottom:0.75rem}
+.page-title{font-family:"Space Mono",monospace;font-size:clamp(1.8rem,4vw,2.5rem);font-weight:700;letter-spacing:-1px;line-height:1.15;margin-bottom:0.75rem}
+.page-sub{color:var(--text2);font-size:16px;max-width:520px}
+.posts-grid{display:flex;flex-direction:column;gap:16px}
+.post-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.5rem;cursor:pointer;transition:border-color 0.15s,transform 0.15s}
+.post-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.post-meta{display:flex;align-items:center;gap:8px;margin-bottom:0.75rem;flex-wrap:wrap}
+.post-date{font-size:12px;color:var(--text3);font-family:"Space Mono",monospace}
+.post-tag{font-size:10px;padding:2px 8px;border-radius:4px;background:rgba(79,123,255,0.1);color:var(--accent2);font-family:"Space Mono",monospace;text-transform:uppercase;letter-spacing:0.04em}
+.post-title{font-family:"Space Mono",monospace;font-size:18px;font-weight:700;margin-bottom:0.5rem;color:var(--text);line-height:1.3}
+.post-excerpt{font-size:14px;color:var(--text2);line-height:1.6}
+.empty-state{text-align:center;padding:4rem;color:var(--text2)}
+.post-back{display:inline-flex;align-items:center;gap:6px;color:var(--text2);font-size:14px;cursor:pointer;background:none;border:none;font-family:"DM Sans",sans-serif;margin-bottom:2rem;padding:0}
+.post-full-title{font-family:"Space Mono",monospace;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;letter-spacing:-1px;line-height:1.15;margin-bottom:1rem}
+.post-full-meta{display:flex;align-items:center;gap:8px;margin-bottom:2rem;padding-bottom:2rem;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.post-body{font-size:16px;line-height:1.85;color:var(--text2)}
+.post-body h1,.post-body h2,.post-body h3{font-family:"Space Mono",monospace;color:var(--text);margin:2rem 0 1rem;line-height:1.3}
+.post-body h2{font-size:1.4rem}.post-body h3{font-size:1.15rem}
+.post-body p{margin-bottom:1.25rem}
+.post-body code{background:var(--bg3);border:1px solid var(--border);padding:2px 6px;border-radius:4px;font-family:"Space Mono",monospace;font-size:13px;color:var(--accent2)}
+.post-body pre{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:1.25rem;overflow-x:auto;margin-bottom:1.25rem}
+.post-body pre code{background:none;border:none;padding:0;font-size:13px;color:var(--text)}
+.post-body ul,.post-body ol{margin-bottom:1.25rem;padding-left:1.5rem}
+.post-body li{margin-bottom:0.4rem}
+.post-body blockquote{border-left:3px solid var(--accent);padding-left:1rem;margin-bottom:1.25rem;color:var(--text2);font-style:italic}
+.post-body a{color:var(--accent2);text-decoration:underline}
+.post-body strong{color:var(--text);font-weight:600}
+.admin-panel{background:var(--bg2);border:1px solid var(--border2);border-radius:16px;padding:2rem;margin-bottom:2rem}
+.admin-login{max-width:400px;margin:4rem auto}
+.admin-login h2{font-family:"Space Mono",monospace;font-size:20px;margin-bottom:1.5rem}
+.field{margin-bottom:1rem}
+.field label{display:block;font-size:13px;color:var(--text2);margin-bottom:6px}
+.field input,.field textarea{width:100%;background:var(--bg2);border:1px solid var(--border2);color:var(--text);padding:10px 14px;border-radius:8px;font-size:15px;font-family:"DM Sans",sans-serif;outline:none;transition:border-color 0.15s}
+.field input:focus,.field textarea:focus{border-color:var(--accent)}
+.field textarea{min-height:300px;resize:vertical;font-size:14px;line-height:1.6}
+.btn{background:var(--accent);color:#fff;border:none;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:"DM Sans",sans-serif;transition:opacity 0.15s;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{opacity:0.85}
+.btn-danger{background:var(--poor)}
+.btn-outline{background:none;border:1px solid var(--border2);color:var(--text2)}
+.btn-outline:hover{color:var(--text);opacity:1}
+.btn-sm{padding:6px 12px;font-size:12px}
+.admin-row{display:flex;align-items:center;gap:1rem;padding:12px 0;border-bottom:1px solid var(--border)}
+.admin-row:last-child{border-bottom:none}
+.admin-row-title{flex:1;font-size:14px;font-weight:500}
+.badge{font-size:11px;padding:2px 8px;border-radius:4px;font-family:"Space Mono",monospace}
+.badge-pub{background:rgba(34,197,94,0.1);color:var(--good)}
+.badge-draft{background:rgba(255,255,255,0.06);color:var(--text3)}
+.row-actions{display:flex;gap:6px}
+.err{color:var(--poor);font-size:13px;margin-top:0.5rem;padding:8px 12px;background:rgba(239,68,68,0.1);border-radius:6px}
+.ok{color:var(--good);font-size:13px;margin-top:0.5rem;padding:8px 12px;background:rgba(34,197,94,0.1);border-radius:6px}
+.sec-title{font-family:"Space Mono",monospace;font-size:16px;font-weight:700;margin-bottom:1.25rem;display:flex;align-items:center;justify-content:space-between}
+.spin{display:inline-block;width:24px;height:24px;border:2px solid rgba(255,255,255,0.15);border-top-color:var(--accent);border-radius:50%;animation:sp 0.7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.tag-pill{display:inline-flex;align-items:center;gap:4px;background:rgba(79,123,255,0.1);color:var(--accent2);padding:3px 10px;border-radius:20px;font-size:12px;margin:2px}
+.tag-pill button{background:none;border:none;color:var(--accent2);cursor:pointer;font-size:14px;padding:0;line-height:1}
+.tag-wrap{display:flex;flex-wrap:wrap;margin-top:6px}
+</style>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+</head>
+<body>
+<nav>
+  <a class="nav-brand" href="https://edgeposture.ai"><svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" rx="4" fill="#080a0f"/><polygon points="16,3 27,9 27,23 16,29 5,23 5,9" fill="#0c1420" stroke="#1a3a5c" stroke-width="1"/><rect x="8" y="9" width="7" height="2" rx="0.5" fill="#4f7bff"/><rect x="8" y="13" width="5" height="2" rx="0.5" fill="#4f7bff"/><rect x="8" y="17" width="7" height="2" rx="0.5" fill="#4f7bff"/><rect x="8" y="9" width="2" height="12" rx="0.5" fill="#4f7bff"/><rect x="17" y="9" width="2" height="12" rx="0.5" fill="#7c9fff"/><rect x="17" y="9" width="7" height="2" rx="0.5" fill="#7c9fff"/><rect x="17" y="13" width="7" height="2" rx="0.5" fill="#7c9fff"/><rect x="22" y="9" width="2" height="6" rx="0.5" fill="#7c9fff"/></svg><span class="nav-name">EdgePosture Blog</span></a>
+  <div class="nav-links">
+    <a class="nav-link" href="https://edgeposture.ai">Home</a>
+    <a class="nav-link" href="https://edgepostureapp.com">Scanner</a>
+    <a class="nav-link" href="https://getedgeposture.com">Consulting</a>
+    <button class="nav-link" id="btn-blog">Blog</button>
+  </div>
+  <button class="nav-btn" id="btn-admin">Admin</button>
+</nav>
+
+<script>
+(function() {
+  try {
+    var params = new URLSearchParams(window.location.search);
+    var token = params.get('ep_token');
+    var userStr = params.get('ep_user');
+    if (token) {
+      localStorage.setItem('ep_token', token);
+      if (userStr) localStorage.setItem('ep_user', userStr);
+      // Clean URL without reloading
+      var clean = window.location.pathname;
+      window.history.replaceState({}, document.title, clean);
+    }
+  } catch(e) {}
+})();
+</script>
+
+<main id="app"></main>
+<script>
+var API="https://blog-api.edgeposture.ai";
+var tok=sessionStorage.getItem("ep_blog_tok")||null;
+var editTags=[];
+
+function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function fmtDate(d){return new Date(d).toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"});}
+function set(h){document.getElementById("app").innerHTML=h;}
+
+function mdToHtml(s){
+  if(!s)return "";
+  var lines=s.split("\n"),out=[],inPre=false;
+  for(var i=0;i<lines.length;i++){
+    var l=lines[i];
+    if(l.indexOf("```")===0){inPre=!inPre;out.push(inPre?"<pre><code>":"</code></pre>");continue;}
+    if(inPre){out.push(esc(l));continue;}
+    if(l.indexOf("### ")===0){out.push("<h3>"+l.slice(4)+"</h3>");continue;}
+    if(l.indexOf("## ")===0){out.push("<h2>"+l.slice(3)+"</h2>");continue;}
+    if(l.indexOf("# ")===0){out.push("<h1>"+l.slice(2)+"</h1>");continue;}
+    if(l.indexOf("> ")===0){out.push("<blockquote>"+l.slice(2)+"</blockquote>");continue;}
+    if(l.indexOf("- ")===0){out.push("<li>"+l.slice(2)+"</li>");continue;}
+    if(l===""){out.push("<br>");continue;}
+    l=l.replace(/`([^`]+)`/g,"<code>$1</code>");
+    out.push("<p>"+l+"</p>");
+  }
+  return out.join("\n");
+}
+
+function tagHtml(tags){
+  return tags.map(function(t){return "<span class=\"tag-pill\">"+esc(t)+"<button onclick=\"removeTag('"+esc(t)+"')\">&times;</button></span>";}).join("");
+}
+
+function removeTag(t){
+  editTags=editTags.filter(function(x){return x!==t;});
+  var el=document.getElementById("tag-list");
+  if(el)el.innerHTML=tagHtml(editTags);
+}
+
+async function apiFetch(path,opts){
+  var r=await fetch(API+path,opts||{});
+  return r.json();
+}
+
+async function showBlog(){
+  set("<div class=\"page-header\"><span class=\"page-eyebrow\">Technical insights</span><h1 class=\"page-title\">EdgePosture Blog</h1><p class=\"page-sub\">CDN architecture, application security, performance engineering, and edge-native development.</p></div><div id=\"pc\"><div class=\"empty-state\"><div class=\"spin\"></div></div></div>");
+  try{
+    var d=await apiFetch("/posts");
+    var posts=d.posts||[];
+    var el=document.getElementById("pc");
+    if(!el)return;
+    if(!posts.length){el.innerHTML="<div class=\"empty-state\"><p>No posts yet.</p></div>";return;}
+    var h="<div class=\"posts-grid\">";
+    posts.forEach(function(p){
+      var tags=JSON.parse(p.tags||"[]");
+      var th=tags.map(function(t){return "<span class=\"post-tag\">"+esc(t)+"</span>";}).join("");
+      h+="<div class=\"post-card\" onclick=\"showPost('"+esc(p.slug)+"')\">";
+      h+="<div class=\"post-meta\"><span class=\"post-date\">"+fmtDate(p.created_at)+"</span>"+th+"</div>";
+      h+="<div class=\"post-title\">"+esc(p.title)+" &#8594;</div>";
+      if(p.excerpt)h+="<div class=\"post-excerpt\">"+esc(p.excerpt)+"</div>";
+      h+="</div>";
+    });
+    h+="</div>";
+    el.innerHTML=h;
+  }catch(e){var el=document.getElementById("pc");if(el)el.innerHTML="<div class=\"empty-state\"><p>Failed to load posts.</p></div>";}
+}
+
+async function showPost(slug){
+  set("<div><button class=\"post-back\" onclick=\"showBlog()\">&#8592; Back</button><div class=\"empty-state\"><div class=\"spin\"></div></div></div>");
+  try{
+    var d=await apiFetch("/posts/"+slug);
+    var p=d.post;
+    if(!p){set("<div class=\"empty-state\"><p>Post not found.</p></div>");return;}
+    var tags=JSON.parse(p.tags||"[]");
+    var th=tags.map(function(t){return "<span class=\"post-tag\">"+esc(t)+"</span>";}).join("");
+    set("<div><button class=\"post-back\" onclick=\"showBlog()\">&#8592; Back to blog</button><h1 class=\"post-full-title\">"+esc(p.title)+"</h1><div class=\"post-full-meta\"><span class=\"post-date\">"+fmtDate(p.created_at)+"</span>"+th+"</div><div class=\"post-body\">"+mdToHtml(p.content)+"</div></div>");
+  }catch(e){set("<div class=\"empty-state\"><p>Failed to load post.</p></div>");}
+}
+
+function showAdminLogin(){
+  if(tok){showAdmin();return;}
+  set("<div class=\"admin-login\"><h2>Admin access</h2><div class=\"field\"><label>Admin token</label><input type=\"password\" id=\"tok-in\" placeholder=\"Enter your admin token\"/></div><div id=\"lerr\"></div><button class=\"btn\" onclick=\"doLogin()\" style=\"margin-top:1rem;width:100%\">Sign in</button></div>");
+  document.getElementById("tok-in").onkeydown=function(e){if(e.key==="Enter")doLogin();};
+}
+
+async function doLogin(){
+  var t=document.getElementById("tok-in").value.trim();
+  var r=await fetch(API+"/admin/posts",{headers:{Authorization:"Bearer "+t}});
+  if(r.ok){tok=t;sessionStorage.setItem("ep_blog_tok",t);showAdmin();}
+  else{document.getElementById("lerr").innerHTML="<div class=\"err\">Invalid token</div>";}
+}
+
+function doLogout(){tok=null;sessionStorage.removeItem("ep_blog_tok");showBlog();}
+
+async function showAdmin(){
+  if(!tok){showAdminLogin();return;}
+  set("<div><div class=\"sec-title\">All posts <button class=\"btn btn-sm\" onclick=\"showEdit(null)\">+ New post</button></div><div class=\"admin-panel\" id=\"plist\"><div class=\"spin\"></div></div><button class=\"btn btn-outline btn-sm\" onclick=\"doLogout()\" style=\"margin-top:1rem\">Sign out</button></div>");
+  try{
+    var d=await fetch(API+"/admin/posts",{headers:{Authorization:"Bearer "+tok}});
+    var data=await d.json();
+    var posts=data.posts||[];
+    var el=document.getElementById("plist");
+    if(!el)return;
+    if(!posts.length){el.innerHTML="<p style=\"color:var(--text2);font-size:14px\">No posts yet.</p>";return;}
+    var h="";
+    posts.forEach(function(p){
+      h+="<div class=\"admin-row\">";
+      h+="<div class=\"admin-row-title\">"+esc(p.title)+"</div>";
+      h+="<span class=\"badge "+(p.published?"badge-pub":"badge-draft")+"\">"+(p.published?"published":"draft")+"</span>";
+      h+="<div class=\"row-actions\">";
+      h+="<button class=\"btn btn-sm btn-outline\" onclick=\"showEdit('"+p.id+"')\" >Edit</button>";
+      h+="<button class=\"btn btn-sm btn-danger\" onclick=\"delPost('"+p.id+"')\" >Del</button>";
+      h+="</div></div>";
+    });
+    el.innerHTML=h;
+  }catch(e){}
+}
+
+async function showEdit(id){
+  if(!tok){showAdminLogin();return;}
+  editTags=[];
+  var post=null;
+  if(id){
+    try{
+      var d=await fetch(API+"/admin/posts",{headers:{Authorization:"Bearer "+tok}});
+      var data=await d.json();
+      post=(data.posts||[]).find(function(p){return p.id===id;})||null;
+      if(post)editTags=JSON.parse(post.tags||"[]");
+    }catch(e){}
+  }
+  var th=tagHtml(editTags);
+  var h="<div>";
+  h+="<button class=\"post-back\" onclick=\"showAdmin()\">&#8592; Back to posts</button>";
+  h+="<div class=\"sec-title\">"+(post?"Edit post":"New post")+"</div>";
+  h+="<div class=\"admin-panel\">";
+  h+="<div class=\"field\"><label>Title</label><input type=\"text\" id=\"f-title\" value=\""+esc(post?post.title:"")+"\"/></div>";
+  h+="<div class=\"field\"><label>Slug</label><input type=\"text\" id=\"f-slug\" value=\""+esc(post?post.slug:"")+"\"/></div>";
+  h+="<div class=\"field\"><label>Excerpt</label><input type=\"text\" id=\"f-excerpt\" value=\""+esc(post&&post.excerpt?post.excerpt:"")+"\"/></div>";
+  h+="<div class=\"field\"><label>Tags (press Enter to add)</label><input type=\"text\" id=\"f-tag\"/><div class=\"tag-wrap\" id=\"tag-list\">"+th+"</div></div>";
+  h+="<div class=\"field\"><label>Content (Markdown)</label><textarea id=\"f-content\">"+esc(post?post.content:"")+"</textarea></div>";
+  h+="<div class=\"field\" style=\"display:flex;align-items:center;gap:10px\"><input type=\"checkbox\" id=\"f-pub\" style=\"width:auto\""+((post&&post.published)?" checked":"")+"/><label for=\"f-pub\" style=\"margin:0;cursor:pointer\">Published</label></div>";
+  h+="<div id=\"smsg\"></div>";
+  h+="<div style=\"display:flex;gap:8px;margin-top:1rem\">";
+  h+="<button class=\"btn\" onclick=\"doSave('"+esc(id||"")+"')\">"+(post?"Update":"Create")+"</button>";
+  h+="<button class=\"btn btn-outline\" onclick=\"showAdmin()\">Cancel</button>";
+  h+="</div></div></div>";
+  set(h);
+  document.getElementById("f-title").oninput=function(){
+    var sl=document.getElementById("f-slug");
+    if(!sl.dataset.m)sl.value=this.value.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+  };
+  document.getElementById("f-slug").oninput=function(){this.dataset.m="1";};
+  document.getElementById("f-tag").onkeydown=function(e){
+    if(e.key!=="Enter")return;
+    e.preventDefault();
+    var v=this.value.trim();
+    if(v&&editTags.indexOf(v)===-1){editTags.push(v);var el=document.getElementById("tag-list");if(el)el.innerHTML=tagHtml(editTags);}
+    this.value="";
+  };
+}
+
+async function doSave(id){
+  var title=document.getElementById("f-title").value.trim();
+  var slug=document.getElementById("f-slug").value.trim();
+  var excerpt=document.getElementById("f-excerpt").value.trim();
+  var content=document.getElementById("f-content").value;
+  var pub=document.getElementById("f-pub").checked;
+  var msg=document.getElementById("smsg");
+  if(!title||!content){msg.innerHTML="<div class=\"err\">Title and content required</div>";return;}
+  var body=JSON.stringify({title:title,slug:slug,excerpt:excerpt,content:content,published:pub,tags:editTags});
+  var url=id?API+"/admin/posts/"+id:API+"/admin/posts";
+  var method=id?"PUT":"POST";
+  try{
+    var r=await fetch(url,{method:method,headers:{"Content-Type":"application/json",Authorization:"Bearer "+tok},body:body});
+    var d=await r.json();
+    if(r.ok){msg.innerHTML="<div class=\"ok\">Saved!</div>";setTimeout(showAdmin,1000);}
+    else{msg.innerHTML="<div class=\"err\">"+esc(d.error)+"</div>";}
+  }catch(e){msg.innerHTML="<div class=\"err\">Failed to save</div>";}
+}
+
+async function delPost(id){
+  if(!confirm("Delete this post?"))return;
+  await fetch(API+"/admin/posts/"+id,{method:"DELETE",headers:{Authorization:"Bearer "+tok}});
+  showAdmin();
+}
+
+document.getElementById("btn-blog").onclick=showBlog;
+document.getElementById("btn-admin").onclick=showAdminLogin;
+showBlog();
+</script>
+</body>
+</html>

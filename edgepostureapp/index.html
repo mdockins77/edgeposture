@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EdgePosture — Web Security & Performance Scanner</title>
+    <meta name="description" content="Analyze any URL for security headers, performance, compliance, and CDN posture." />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+</head>
+  <body>
+    
+<script>
+(function() {
+  try {
+    var params = new URLSearchParams(window.location.search);
+    var token = params.get('ep_token');
+    var userStr = params.get('ep_user');
+    if (token) {
+      localStorage.setItem('ep_token', token);
+      if (userStr) localStorage.setItem('ep_user', userStr);
+      // Clean URL without reloading
+      var clean = window.location.pathname;
+      window.history.replaceState({}, document.title, clean);
+    }
+  } catch(e) {}
+})();
+</script>
+
+<div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
