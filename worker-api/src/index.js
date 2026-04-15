@@ -23,7 +23,7 @@ export default {
       });
 
     try {
-      // Auth routes
+      // Auth routes - pass env for Turnstile secret access
       if (url.pathname === '/auth/login' && request.method === 'POST') {
         return respond(await handleAuth(request, env, 'login'));
       }

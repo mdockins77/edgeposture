@@ -1,6 +1,40 @@
+// Turnstile validation helper
+async function validateTurnstileToken(token, secret, remoteip) {
+  if (!token) return { success: false, error: 'Missing Turnstile token' };
+  if (!secret) return { success: false, error: 'Turnstile secret not configured' };
+  
+  try {
+    const result = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        secret: secret,
+        response: token,
+        remoteip: remoteip
+      })
+    });
+    
+    const data = await result.json();
+    return data;
+  } catch (err) {
+    console.error('Turnstile validation error:', err);
+    return { success: false, error: 'Turnstile validation failed' };
+  }
+}
+
 export async function handleAuth(request, env, action) {
+  const clientIP = request.headers.get('CF-Connecting-IP');
+  
   if (action === 'login') {
-    const { email, password } = await request.json();
+    const { email, password, turnstileToken } = await request.json();
+    
+    // Validate Turnstile token
+    const turnstileResult = await validateTurnstileToken(turnstileToken, env.TURNSTILE_SECRET, clientIP);
+    if (!turnstileResult.success) {
+      console.error('Turnstile validation failed:', turnstileResult['error-codes']);
+      throw new Error('Security verification failed. Please try again.');
+    }
+    
     if (!email || !password) throw new Error('Email and password required');
     const user = await env.DB.prepare('SELECT * FROM users WHERE email = ?').bind(email.toLowerCase()).first();
     if (!user) throw new Error('Invalid credentials');
@@ -9,8 +43,17 @@ export async function handleAuth(request, env, action) {
     const token = await createToken({ id: user.id, email: user.email }, env.JWT_SECRET);
     return { token, user: { id: user.id, email: user.email, name: user.name } };
   }
+  
   if (action === 'register') {
-    const { email, password, name } = await request.json();
+    const { email, password, name, turnstileToken } = await request.json();
+    
+    // Validate Turnstile token
+    const turnstileResult = await validateTurnstileToken(turnstileToken, env.TURNSTILE_SECRET, clientIP);
+    if (!turnstileResult.success) {
+      console.error('Turnstile validation failed:', turnstileResult['error-codes']);
+      throw new Error('Security verification failed. Please try again.');
+    }
+    
     if (!email || !password || !name) throw new Error('Name, email, and password required');
     if (password.length < 8) throw new Error('Password must be at least 8 characters');
     const existing = await env.DB.prepare('SELECT id FROM users WHERE email = ?').bind(email.toLowerCase()).first();
@@ -21,6 +64,7 @@ export async function handleAuth(request, env, action) {
     const token = await createToken({ id, email: email.toLowerCase() }, env.JWT_SECRET);
     return { token, user: { id, email: email.toLowerCase(), name } };
   }
+  
   if (action === 'me') {
     const user = await requireAuth(request, env);
     return { user };

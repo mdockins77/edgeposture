@@ -91,6 +91,8 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:2.
 @media(max-width:768px){.product-split,.services-grid,.steps{grid-template-columns:1fr}.stats-bar{grid-template-columns:repeat(2,1fr)}}
 </style>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+<!-- Cloudflare Turnstile -->
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
 </head>
 <body>
 <nav>
@@ -205,6 +207,8 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:2.
       <p>Sign in to access the scanner, AI assistant, and blog.</p>
       <div class="modal-field"><label>Email</label><input type="email" id="login-email" placeholder="you@example.com"/></div>
       <div class="modal-field"><label>Password</label><input type="password" id="login-password" placeholder="Your password"/></div>
+      <!-- Turnstile widget container for login -->
+      <div id="login-turnstile" class="turnstile-container" style="margin:12px 0;min-height:65px;"></div>
       <div class="modal-err" id="login-err"></div>
       <button class="modal-btn" id="login-submit-btn" onclick="doLogin()">Sign in</button>
       <div class="modal-switch">No account? <button onclick="showRegister()">Create one free</button></div>
@@ -218,6 +222,8 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:2.
       <div class="modal-field"><label>Name</label><input type="text" id="reg-name" placeholder="Your name"/></div>
       <div class="modal-field"><label>Email</label><input type="email" id="reg-email" placeholder="you@example.com"/></div>
       <div class="modal-field"><label>Password</label><input type="password" id="reg-password" placeholder="Min 8 characters"/></div>
+      <!-- Turnstile widget container for register -->
+      <div id="register-turnstile" class="turnstile-container" style="margin:12px 0;min-height:65px;"></div>
       <div class="modal-err" id="reg-err"></div>
       <button class="modal-btn" id="reg-submit-btn" onclick="doRegister()">Create account</button>
       <div class="modal-switch">Already have an account? <button onclick="showLogin()">Sign in</button></div>
@@ -227,9 +233,12 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:2.
 
 <script>
 var API = 'https://api.edgepostureapp.com';
+var TURNSTILE_SITE_KEY = '0x4AAAAAAC-CH-NigLxyNoOyH7LzSYLVdLM'; // Replace with your production site key
 var tok = localStorage.getItem('ep_token') || null;
 var user = null;
 var pendingUrl = null;
+var loginWidgetId = null;
+var registerWidgetId = null;
 
 try { user = JSON.parse(localStorage.getItem('ep_user') || 'null'); } catch(e) {}
 
@@ -275,18 +284,21 @@ function closeModal() {
   document.getElementById('auth-modal').style.display = 'none';
   pendingUrl = null;
   clearErrors();
+  resetTurnstileWidgets();
 }
 
 function showLogin() {
   document.getElementById('login-form').style.display = 'block';
   document.getElementById('register-form').style.display = 'none';
   clearErrors();
+  renderLoginTurnstile();
 }
 
 function showRegister() {
   document.getElementById('login-form').style.display = 'none';
   document.getElementById('register-form').style.display = 'block';
   clearErrors();
+  renderRegisterTurnstile();
 }
 
 function clearErrors() {
@@ -300,18 +312,99 @@ function showErr(id, msg) {
   el.style.display = 'block';
 }
 
+// Turnstile widget rendering
+function renderLoginTurnstile() {
+  if (!window.turnstile) return;
+  if (loginWidgetId) {
+    window.turnstile.reset(loginWidgetId);
+    return;
+  }
+  loginWidgetId = window.turnstile.render('#login-turnstile', {
+    sitekey: TURNSTILE_SITE_KEY,
+    action: 'login',
+    theme: 'dark',
+    callback: function(token) {
+      console.log('Login Turnstile verified');
+    },
+    'error-callback': function(code) {
+      console.error('Login Turnstile error:', code);
+      showErr('login-err', 'Security verification failed. Please try again.');
+    },
+    'expired-callback': function() {
+      console.log('Login Turnstile token expired');
+      showErr('login-err', 'Verification expired. Please try again.');
+    }
+  });
+}
+
+function renderRegisterTurnstile() {
+  if (!window.turnstile) return;
+  if (registerWidgetId) {
+    window.turnstile.reset(registerWidgetId);
+    return;
+  }
+  registerWidgetId = window.turnstile.render('#register-turnstile', {
+    sitekey: TURNSTILE_SITE_KEY,
+    action: 'register',
+    theme: 'dark',
+    callback: function(token) {
+      console.log('Register Turnstile verified');
+    },
+    'error-callback': function(code) {
+      console.error('Register Turnstile error:', code);
+      showErr('reg-err', 'Security verification failed. Please try again.');
+    },
+    'expired-callback': function() {
+      console.log('Register Turnstile token expired');
+      showErr('reg-err', 'Verification expired. Please try again.');
+    }
+  });
+}
+
+function resetTurnstileWidgets() {
+  if (loginWidgetId && window.turnstile) {
+    window.turnstile.reset(loginWidgetId);
+  }
+  if (registerWidgetId && window.turnstile) {
+    window.turnstile.reset(registerWidgetId);
+  }
+}
+
+function getTurnstileToken(widgetId) {
+  if (!window.turnstile) return null;
+  return window.turnstile.getResponse(widgetId);
+}
+
 async function doLogin() {
   var email = document.getElementById('login-email').value.trim();
   var password = document.getElementById('login-password').value;
   var btn = document.getElementById('login-submit-btn');
+  
   if (!email || !password) { showErr('login-err', 'Email and password required'); return; }
+  
+  // Get Turnstile token
+  var turnstileToken = getTurnstileToken(loginWidgetId);
+  if (!turnstileToken) { showErr('login-err', 'Please complete the security verification'); return; }
+  
   btn.textContent = 'Signing in...'; btn.disabled = true;
   try {
-    var r = await fetch(API + '/auth/login', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({email, password}) });
+    var r = await fetch(API + '/auth/login', { 
+      method: 'POST', 
+      headers: {'Content-Type':'application/json'}, 
+      body: JSON.stringify({email, password, turnstileToken}) 
+    });
     var d = await r.json();
-    if (!r.ok) { showErr('login-err', d.error || 'Invalid credentials'); return; }
+    if (!r.ok) { 
+      // Reset Turnstile on error
+      if (loginWidgetId && window.turnstile) window.turnstile.reset(loginWidgetId);
+      showErr('login-err', d.error || 'Invalid credentials'); 
+      return; 
+    }
     onAuthed(d.token, d.user);
-  } catch(e) { showErr('login-err', 'Connection error. Please try again.'); }
+  } catch(e) { 
+    if (loginWidgetId && window.turnstile) window.turnstile.reset(loginWidgetId);
+    showErr('login-err', 'Connection error. Please try again.'); 
+  }
   finally { btn.textContent = 'Sign in'; btn.disabled = false; }
 }
 
@@ -320,15 +413,33 @@ async function doRegister() {
   var email = document.getElementById('reg-email').value.trim();
   var password = document.getElementById('reg-password').value;
   var btn = document.getElementById('reg-submit-btn');
+  
   if (!name || !email || !password) { showErr('reg-err', 'All fields required'); return; }
   if (password.length < 8) { showErr('reg-err', 'Password must be at least 8 characters'); return; }
+  
+  // Get Turnstile token
+  var turnstileToken = getTurnstileToken(registerWidgetId);
+  if (!turnstileToken) { showErr('reg-err', 'Please complete the security verification'); return; }
+  
   btn.textContent = 'Creating account...'; btn.disabled = true;
   try {
-    var r = await fetch(API + '/auth/register', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({name, email, password}) });
+    var r = await fetch(API + '/auth/register', { 
+      method: 'POST', 
+      headers: {'Content-Type':'application/json'}, 
+      body: JSON.stringify({name, email, password, turnstileToken}) 
+    });
     var d = await r.json();
-    if (!r.ok) { showErr('reg-err', d.error || 'Registration failed'); return; }
+    if (!r.ok) { 
+      // Reset Turnstile on error
+      if (registerWidgetId && window.turnstile) window.turnstile.reset(registerWidgetId);
+      showErr('reg-err', d.error || 'Registration failed'); 
+      return; 
+    }
     onAuthed(d.token, d.user);
-  } catch(e) { showErr('reg-err', 'Connection error. Please try again.'); }
+  } catch(e) { 
+    if (registerWidgetId && window.turnstile) window.turnstile.reset(registerWidgetId);
+    showErr('reg-err', 'Connection error. Please try again.'); 
+  }
   finally { btn.textContent = 'Create account'; btn.disabled = false; }
 }
 
